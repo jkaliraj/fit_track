@@ -370,9 +370,8 @@ async function logWorkout() {
   loadWorkouts();
 }
 
-const _loaderEmojis = ['🏃', '🏋️', '🚴', '🧘', '🏊'];
 function fitLoader() {
-    return `<div class="fit-loader">${_loaderEmojis.map((e, i) => `<span class="fit-loader-emoji" style="animation-delay:${i * 0.12}s">${e}</span>`).join('')}<span class="fit-loader-text">Loading...</span></div>`;
+    return `<div class="fit-loader"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f3c3/512.gif" alt="🏃" class="fit-loader-img"><span class="fit-loader-text">Loading...</span></div>`;
 }
 
 async function loadWorkouts() {
