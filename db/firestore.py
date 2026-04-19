@@ -96,8 +96,9 @@ def get_workouts(user_id, target_date=None, limit=50):
     q = _get_db().collection("ft_workouts").where("user_id", "==", user_id)
     if target_date:
         q = q.where("date", "==", target_date)
-    q = q.order_by("created_at", direction=firestore.Query.DESCENDING).limit(limit)
-    return [_doc_dict(d) for d in q.stream()]
+    docs = [_doc_dict(d) for d in q.stream()]
+    docs.sort(key=lambda x: x.get("created_at", ""), reverse=True)
+    return docs[:limit]
 
 # ── Meals ────────────────────────────────────────────────────
 def log_meal(user_id, name, calories, protein_g, carbs_g, fat_g, meal_type):
@@ -118,8 +119,9 @@ def get_meals(user_id, target_date=None, limit=50):
     q = _get_db().collection("ft_meals").where("user_id", "==", user_id)
     if target_date:
         q = q.where("date", "==", target_date)
-    q = q.order_by("created_at", direction=firestore.Query.DESCENDING).limit(limit)
-    return [_doc_dict(d) for d in q.stream()]
+    docs = [_doc_dict(d) for d in q.stream()]
+    docs.sort(key=lambda x: x.get("created_at", ""), reverse=True)
+    return docs[:limit]
 
 # ── Daily Logs ───────────────────────────────────────────────
 def update_daily_log(user_id, water_ml=None, sleep_hours=None, steps=None, weight_kg=None, mood=None):
