@@ -1,4 +1,4 @@
-"""Firestore operations for FitTrack AI — prefixed ft_ to avoid collision with FanZone."""
+"""Firestore operations for FitTrack AI — uses separate 'fittrack-db' database."""
 from google.cloud import firestore
 import datetime as dt
 import hashlib
@@ -7,7 +7,7 @@ _db = None
 def _get_db():
     global _db
     if _db is None:
-        _db = firestore.Client()
+        _db = firestore.Client(database="fittrack-db")
     return _db
 
 # ── Helpers ──────────────────────────────────────────────────
