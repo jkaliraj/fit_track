@@ -392,7 +392,7 @@ async function logWorkout() {
 }
 
 function fitLoader() {
-    return `<div class="fit-loader"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f3c3/512.gif" alt="🏃" class="fit-loader-img"><span class="fit-loader-text">Loading...</span></div>`;
+    return `<div class="fit-loader"><picture><source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6f8/512.webp" type="image/webp"><img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6f8/512.gif" alt="🛸" class="fit-loader-img"></picture><span class="fit-loader-text">Loading...</span></div>`;
 }
 
 async function loadWorkouts() {
