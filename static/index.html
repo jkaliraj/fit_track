@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack AI — Smart Fitness Companion</title>
+    <link rel="icon" href="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa/512.webp" type="image/webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+    <!-- ── FLOATING BG ORBS ───────────────────────────────── -->
+    <div class="bg-orbs" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- ── TOP BAR ────────────────────────────────────────── -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo">
+                <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4aa/512.webp" alt="" class="noto noto-sm">
+                <span>FitTrack</span>
+                <span class="logo-badge">AI</span>
+            </div>
+        </div>
+        <nav class="pill-nav hidden" id="desktopNav">
+            <a href="#" class="pill active" data-section="dashboard">🏠 Home</a>
+            <a href="#" class="pill" data-section="workouts">🏋️ Workouts</a>
+            <a href="#" class="pill" data-section="nutrition">🍎 Nutrition</a>
+            <a href="#" class="pill" data-section="progress">📊 Progress</a>
+            <a href="#" class="pill" data-section="ai">🤖 Coach</a>
+        </nav>
+        <div class="topbar-right">
+            <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><span id="themeIcon">🌙</span></button>
+            <button class="icon-btn hidden" id="logoutBtn" onclick="logout()" title="Sign out">👋</button>
+            <div class="user-chip hidden" id="userBadge">
+                <span class="avatar-circle" id="navAvatar">?</span>
+                <span id="navUsername">—</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── DASHBOARD ──────────────────────────────────────── -->
+    <main class="page section-enter auth-page" id="sectionDashboard">
+
+        <!-- Auth — Futuristic split-screen -->
+        <div id="authOverlay" class="auth-screen">
+            <!-- Left: Hero visual -->
+            <div class="auth-hero">
+                <div class="auth-hero-bg">
+                    <div class="hero-ring hero-ring-1"></div>
+                    <div class="hero-ring hero-ring-2"></div>
+                    <div class="hero-ring hero-ring-3"></div>
+                    <div class="hero-glow"></div>
+                </div>
+                <div class="auth-hero-content">
+                    <span class="auth-hero-emoji" style="font-size:3rem">🔥</span>
+                    <h1 class="auth-hero-title">FitTrack<span class="auth-ai-badge">AI</span></h1>
+                    <p class="auth-hero-sub">Your intelligent fitness companion.<br>Powered by Gemini.</p>
+                    <div class="auth-hero-stats">
+                        <div class="hero-stat">
+                            <span class="hero-stat-num">50+</span>
+                            <span class="hero-stat-label">AI Features</span>
+                        </div>
+                        <div class="hero-stat-divider"></div>
+                        <div class="hero-stat">
+                            <span class="hero-stat-num">24/7</span>
+                            <span class="hero-stat-label">AI Coach</span>
+                        </div>
+                        <div class="hero-stat-divider"></div>
+                        <div class="hero-stat">
+                            <span class="hero-stat-num">📸</span>
+                            <span class="hero-stat-label">Food Scan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Right: Form panel -->
+            <div class="auth-panel">
+                <div class="auth-panel-inner">
+                    <div class="auth-head">
+                        <p class="auth-welcome-tag">Welcome back</p>
+                        <h2 class="auth-title">Sign in to continue</h2>
+                    </div>
+                    <div class="auth-tabs">
+                        <button class="tab-btn active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+                        <button class="tab-btn" id="tabRegister" onclick="switchAuthTab('register')">Create Account</button>
+                    </div>
+                    <div class="auth-form-area">
+                        <div id="authLoginForm" class="auth-form">
+                            <div class="field-float">
+                                <input type="text" id="loginUserId" placeholder=" " class="field" autocomplete="username">
+                                <label for="loginUserId">Username</label>
+                            </div>
+                            <div class="field-float">
+                                <input type="password" id="loginPassword" placeholder=" " class="field" onkeydown="if(event.key==='Enter')loginUser()" autocomplete="current-password">
+                                <label for="loginPassword">Password</label>
+                            </div>
+                            <button class="btn-glow full" onclick="loginUser()">⚡ Sign In</button>
+                        </div>
+                        <div id="authRegisterForm" class="auth-form hidden">
+                            <div class="field-row">
+                                <div class="field-float">
+                                    <input type="text" id="regUserId" placeholder=" " class="field" autocomplete="username">
+                                    <label for="regUserId">Username</label>
+                                </div>
+                                <div class="field-float">
+                                    <input type="text" id="regDisplayName" placeholder=" " class="field">
+                                    <label for="regDisplayName">Display name</label>
+                                </div>
+                            </div>
+                            <div class="field-float">
+                                <input type="password" id="regPassword" placeholder=" " class="field" autocomplete="new-password">
+                                <label for="regPassword">Password (min 4 chars)</label>
+                            </div>
+                            <div class="field-row">
+                                <div class="field-float">
+                                    <input type="number" id="regAge" placeholder=" " class="field">
+                                    <label for="regAge">Age</label>
+                                </div>
+                                <div class="field-float">
+                                    <input type="number" id="regWeight" placeholder=" " step="0.1" class="field">
+                                    <label for="regWeight">Weight (kg)</label>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <div class="field-float">
+                                    <input type="number" id="regHeight" placeholder=" " class="field">
+                                    <label for="regHeight">Height (cm)</label>
+                                </div>
+                            </div>
+                            <button class="btn-glow full" onclick="registerUser()">🚀 Create Account</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard content -->
+        <div class="hidden" id="dashboardContent">
+            <div class="dash-top">
+                <div>
+                    <h1 class="page-title" id="dashGreeting">Good morning! 👋</h1>
+                    <p class="muted" id="dashSub">Let's crush your goals today</p>
+                </div>
+                <div class="streak-pill">🔥 <span id="streakCount">0</span> day streak</div>
+            </div>
+
+            <!-- Stat cards -->
+            <div class="stats-row">
+                <div class="glass-card stat-card">
+                    <div class="stat-top">
+                        <span style="font-size:1.4rem">🔥</span>
+                        <span class="stat-label">Calories</span>
+                    </div>
+                    <div class="stat-val"><span id="calEaten">0</span><small> / <span id="calGoal">2000</span></small></div>
+                    <div class="progress-bar"><div class="progress-fill fill-orange" id="barCal"></div></div>
+                </div>
+                <div class="glass-card stat-card">
+                    <div class="stat-top">
+                        <span style="font-size:1.4rem">💧</span>
+                        <span class="stat-label">Water</span>
+                    </div>
+                    <div class="stat-val"><span id="waterAmt">0</span><small> / <span id="waterGoal">2500</span> ml</small></div>
+                    <div class="progress-bar"><div class="progress-fill fill-blue" id="barWater"></div></div>
+                </div>
+                <div class="glass-card stat-card">
+                    <div class="stat-top">
+                        <span style="font-size:1.4rem">⚡</span>
+                        <span class="stat-label">Burned</span>
+                    </div>
+                    <div class="stat-val"><span id="calBurned">0</span><small> cal</small></div>
+                    <div class="progress-bar"><div class="progress-fill fill-green" id="barBurn"></div></div>
+                </div>
+            </div>
+
+            <!-- Motivation -->
+            <div class="glass-card motiv-card">
+                <span class="motiv-ico" style="font-size:1.5rem">✨</span>
+                <p id="motivationText">Loading motivation...</p>
+            </div>
+
+            <!-- Quick actions -->
+            <div class="actions-row">
+                <button class="glass-card action-btn" onclick="switchSection('workouts')">
+                    <span style="font-size:1.5rem">🏃</span>
+                    <span>Log Workout</span>
+                </button>
+                <button class="glass-card action-btn" onclick="switchSection('nutrition')">
+                    <span style="font-size:1.5rem">🍽️</span>
+                    <span>Log Meal</span>
+                </button>
+                <button class="glass-card action-btn" onclick="openScanner()">
+                    <span style="font-size:1.5rem">📸</span>
+                    <span>Scan Food</span>
+                </button>
+                <button class="glass-card action-btn" onclick="switchSection('ai')">
+                    <span style="font-size:1.5rem">🤖</span>
+                    <span>AI Coach</span>
+                </button>
+            </div>
+
+            <!-- Suggestions -->
+            <div class="glass-card panel">
+                <h3 class="panel-title">✨ Smart Suggestions</h3>
+                <div class="sug-list" id="suggestionsGrid">
+                    <div class="sug-row"><span class="sug-dot"></span><div><strong>Loading...</strong><span>Getting personalized tips</span></div></div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="glass-card panel">
+                <h3 class="panel-title">📋 Recent Activity</h3>
+                <div id="recentActivity" class="feed"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── WORKOUTS ───────────────────────────────────────── -->
+    <main class="page hidden" id="sectionWorkouts">
+        <h1 class="page-title">💪 Workouts</h1>
+        <div class="glass-card panel">
+            <h3 class="panel-title">Log Workout</h3>
+            <div class="sport-grid" id="workoutTypeChips">
+                <button class="sport-btn active" data-type="running">🏃 Running</button>
+                <button class="sport-btn" data-type="cycling">🚴 Cycling</button>
+                <button class="sport-btn" data-type="weightlifting">🏋️ Weights</button>
+                <button class="sport-btn" data-type="yoga">🧘 Yoga</button>
+                <button class="sport-btn" data-type="swimming">🏊 Swimming</button>
+                <button class="sport-btn" data-type="hiit">⚡ HIIT</button>
+                <button class="sport-btn" data-type="walking">🚶 Walking</button>
+            </div>
+            <div class="field-row">
+                <div class="field-wrap"><label>Duration (min)</label>
+                    <input type="number" id="workoutDuration" value="30" min="1" class="field"></div>
+                <div class="field-wrap"><label>Intensity</label>
+                    <div class="chip-picker" id="workoutIntensity" data-value="moderate">
+                        <div class="chip-options">
+                            <button type="button" class="chip-opt" data-val="light">Light</button>
+                            <button type="button" class="chip-opt active" data-val="moderate">Moderate</button>
+                            <button type="button" class="chip-opt" data-val="intense">Intense</button>
+                        </div>
+                    </div></div>
+            </div>
+            <input type="text" id="workoutNotes" placeholder="Notes (optional)" class="field">
+            <button class="btn-glow full" onclick="logWorkout()">Log Workout</button>
+        </div>
+        <div class="glass-card panel">
+            <h3 class="panel-title">Today's Workouts</h3>
+            <div id="todayWorkouts" class="list"></div>
+        </div>
+        <div class="glass-card panel">
+            <h3 class="panel-title">History</h3>
+            <div id="workoutHistory" class="list"></div>
+        </div>
+    </main>
+
+    <!-- ── NUTRITION ──────────────────────────────────────── -->
+    <main class="page hidden" id="sectionNutrition">
+        <div class="page-header-row">
+            <h1 class="page-title">🍎 Nutrition</h1>
+            <button class="btn-outline" onclick="openScanner()">📸 Scan Food</button>
+        </div>
+        <div class="glass-card macro-panel">
+            <div class="macro-row">
+                <span class="macro-name">🔥 Calories</span>
+                <div class="macro-track"><div class="macro-fill fill-orange" id="calBar"></div></div>
+                <span class="macro-num" id="macroCalVal">0 / 2000</span>
+            </div>
+            <div class="macro-tags">
+                <span class="mtag mtag-blue">🥩 <span id="macroP">0</span>g protein</span>
+                <span class="mtag mtag-amber">🍚 <span id="macroC">0</span>g carbs</span>
+                <span class="mtag mtag-purple">🥑 <span id="macroF">0</span>g fat</span>
+            </div>
+        </div>
+        <div class="glass-card panel">
+            <h3 class="panel-title">Log Meal</h3>
+            <div class="field-row">
+                <div class="field-wrap"><label>Meal Type</label>
+                    <div class="chip-picker" id="mealType" data-value="breakfast">
+                        <div class="chip-options">
+                            <button type="button" class="chip-opt active" data-val="breakfast">Breakfast</button>
+                            <button type="button" class="chip-opt" data-val="lunch">Lunch</button>
+                            <button type="button" class="chip-opt" data-val="dinner">Dinner</button>
+                            <button type="button" class="chip-opt" data-val="snack">Snack</button>
+                        </div>
+                    </div></div>
+                <div class="field-wrap"><label>Food Name</label>
+                    <input type="text" id="mealName" placeholder="What did you eat?" class="field"></div>
+            </div>
+            <div class="field-row">
+                <div class="field-wrap"><label>Calories</label>
+                    <input type="number" id="mealCalories" placeholder="kcal" class="field"></div>
+                <div class="field-wrap"><label>Protein (g)</label>
+                    <input type="number" id="mealProtein" placeholder="g" class="field"></div>
+            </div>
+            <div class="field-row">
+                <div class="field-wrap"><label>Carbs (g)</label>
+                    <input type="number" id="mealCarbs" placeholder="g" class="field"></div>
+                <div class="field-wrap"><label>Fat (g)</label>
+                    <input type="number" id="mealFat" placeholder="g" class="field"></div>
+            </div>
+            <button class="btn-glow full" onclick="logMeal()">Add Meal</button>
+        </div>
+        <div class="glass-card panel">
+            <h3 class="panel-title">Today's Meals</h3>
+            <div id="todayMeals" class="list"></div>
+        </div>
+    </main>
+
+    <!-- ── FOOD SCANNER MODAL ─────────────────────────────── -->
+    <div class="modal-overlay hidden" id="scannerModal">
+        <div class="modal-backdrop" onclick="closeScanner()"></div>
+        <div class="glass-card modal-card">
+            <button class="close-x" onclick="closeScanner()">&times;</button>
+            <h3>📸 Scan Food with AI</h3>
+            <p class="muted">Take a photo or upload an image of your food</p>
+            <input type="file" id="foodImageInput" accept="image/*" capture="environment" style="display:none" onchange="handleFoodImage(event)">
+            <div class="scan-zone" id="scanArea">
+                <button class="btn-outline" onclick="document.getElementById('foodImageInput').click()">📷 Choose Photo</button>
+            </div>
+            <div id="scanPreview" class="hidden"><img id="scanImage" alt="Food preview" class="scan-img"></div>
+            <div id="scanLoading" class="hidden">
+                <div class="spinner-wrap"><div class="spinner"></div>Analyzing with Gemini AI...</div>
+            </div>
+            <div id="scanResult" class="hidden">
+                <div class="scan-result glass-card">
+                    <h4 id="scanFoodName">—</h4>
+                    <p class="muted" id="scanServing">—</p>
+                    <div class="scan-stats">
+                        <span class="ss ss-orange">🔥 <span id="scanCal">0</span> cal</span>
+                        <span class="ss ss-blue">🥩 <span id="scanPro">0</span>g</span>
+                        <span class="ss ss-amber">🍚 <span id="scanCarb">0</span>g</span>
+                        <span class="ss ss-purple">🥑 <span id="scanFatV">0</span>g</span>
+                    </div>
+                    <p class="muted scan-note" id="scanNotes"></p>
+                    <button class="btn-glow full" onclick="saveScanResult()">Add to Meals</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── PROGRESS ───────────────────────────────────────── -->
+    <main class="page hidden" id="sectionProgress">
+        <h1 class="page-title">📊 Progress</h1>
+        <div class="glass-card panel">
+            <h3 class="panel-title">🎯 Your Goals</h3>
+            <div class="field-row">
+                <div class="field-wrap"><label>Daily Calorie Goal</label>
+                    <input type="number" id="goalCalories" class="field" value="2000"></div>
+                <div class="field-wrap"><label>Daily Water (ml)</label>
+                    <input type="number" id="goalWater" class="field" value="2500"></div>
+            </div>
+            <div class="field-row">
+                <div class="field-wrap"><label>Weekly Workouts</label>
+                    <input type="number" id="goalWorkouts" class="field" value="4"></div>
+                <div class="field-wrap"><label>Target Weight (kg)</label>
+                    <input type="number" id="goalWeight" class="field" step="0.1"></div>
+            </div>
+            <button class="btn-glow" onclick="saveGoals()">Save Goals</button>
+        </div>
+        <div class="glass-card panel">
+            <h3 class="panel-title">📅 This Week</h3>
+            <div class="week-bars" id="weekChart"></div>
+        </div>
+        <div class="glass-card panel">
+            <h3 class="panel-title">📝 Daily Check-in</h3>
+            <div class="field-row">
+                <div class="field-wrap"><label>💧 Water (ml)</label>
+                    <input type="number" id="logWater" class="field" placeholder="0"></div>
+                <div class="field-wrap"><label>😴 Sleep (hours)</label>
+                    <input type="number" id="logSleep" class="field" step="0.5" placeholder="0"></div>
+            </div>
+            <div class="field-row">
+                <div class="field-wrap"><label>👟 Steps</label>
+                    <input type="number" id="logSteps" class="field" placeholder="0"></div>
+                <div class="field-wrap"><label>⚖️ Weight (kg)</label>
+                    <input type="number" id="logWeightInput" class="field" step="0.1" placeholder="optional"></div>
+            </div>
+            <div class="mood-row">
+                <label>How do you feel?</label>
+                <div class="mood-btns">
+                    <button class="mood-btn" data-mood="great" onclick="selectMood('great')">😊 Great</button>
+                    <button class="mood-btn active" data-mood="good" onclick="selectMood('good')">🙂 Good</button>
+                    <button class="mood-btn" data-mood="okay" onclick="selectMood('okay')">😐 Okay</button>
+                    <button class="mood-btn" data-mood="low" onclick="selectMood('low')">😞 Low</button>
+                </div>
+            </div>
+            <button class="btn-glow full" onclick="saveDailyLog()">Save Check-in</button>
+        </div>
+    </main>
+
+    <!-- ── AI COACH ───────────────────────────────────────── -->
+    <main class="page hidden" id="sectionAi">
+        <div class="chat-shell">
+            <div class="chat-stream" id="aiMessages">
+                <div class="bubble-row bot">
+                    <div class="bubble-icon">🤖</div>
+                    <div class="bubble glass-card">
+                        Hey! I'm your AI fitness coach 💪<br><br>
+                        Ask me about workouts, nutrition, or your fitness goals.<br><br>
+                        <span class="muted" style="font-size:0.8rem;">Try: "Suggest a 30-min workout", "How many calories in pasta?", "Tips for better sleep"</span>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-bar glass-card">
+                <input type="text" id="aiInput" placeholder="Ask your AI coach..." class="field" onkeydown="if(event.key==='Enter')sendAiChat()">
+                <button class="send-btn" onclick="sendAiChat()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── MOBILE NAV ─────────────────────────────────────── -->
+    <nav class="mobile-dock glass-card hidden" id="mobileNav">
+        <a href="#" class="dock-btn active" data-section="dashboard"><span>🏠</span><span>Home</span></a>
+        <a href="#" class="dock-btn" data-section="workouts"><span>💪</span><span>Workouts</span></a>
+        <a href="#" class="dock-btn" data-section="nutrition"><span>🍎</span><span>Nutrition</span></a>
+        <a href="#" class="dock-btn" data-section="progress"><span>📊</span><span>Progress</span></a>
+        <a href="#" class="dock-btn" data-section="ai"><span>🤖</span><span>Coach</span></a>
+    </nav>
+
+    <!-- ── TOASTS ─────────────────────────────────────────── -->
+    <div class="toast-stack" id="toastContainer"></div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
