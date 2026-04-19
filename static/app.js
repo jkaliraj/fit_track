@@ -610,24 +610,32 @@ async function saveGoals() {
 async function loadWeekChart() {
   if (!currentUser) return;
   try {
-    const week = await api(
-      `/daily-log/${currentUser.user_id}/week`,
-      null,
-      "GET",
-    );
-    if (!Array.isArray(week)) return;
-    const chart = document.getElementById("weekChart");
+    const today = new Date();
+    const weekData = [];
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const maxCal = Math.max(...week.map((d) => (d.water_ml || 0) + 1), 1);
-    chart.innerHTML = week
-      .map((d) => {
-        const dayName = days[new Date(d.date + "T12:00:00").getDay()] || "—";
-        const val = d.water_ml || 0;
-        const pct = (val / maxCal) * 100;
+    // Fetch workouts for the past 7 days
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().slice(0, 10);
+      weekData.push({ date: dateStr, day: days[d.getDay()], cal: 0 });
+    }
+    const allWorkouts = await api(`/workouts/${currentUser.user_id}`, null, "GET");
+    if (Array.isArray(allWorkouts)) {
+      allWorkouts.forEach(w => {
+        const entry = weekData.find(d => d.date === w.date);
+        if (entry) entry.cal += w.calories_burned || 0;
+      });
+    }
+    const maxCal = Math.max(...weekData.map(d => d.cal), 1);
+    const chart = document.getElementById("weekChart");
+    chart.innerHTML = weekData
+      .map(d => {
+        const pct = (d.cal / maxCal) * 100;
         return `<div class="wbar">
                 <div class="wbar-fill" style="height:${Math.max(pct, 3)}%"></div>
-                <span class="wbar-val">${val}</span>
-                <span class="wbar-day">${dayName}</span>
+                <span class="wbar-val">${d.cal}</span>
+                <span class="wbar-day">${d.day}</span>
             </div>`;
       })
       .join("");
