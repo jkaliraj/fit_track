@@ -1656,6 +1656,29 @@ body {
   border-color: rgba(59, 130, 246, 0.2);
 }
 
+/* ── Fitness Loader ──────────────────────────────────────── */
+.fit-loader {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0.3rem; padding: 1.5rem 0;
+}
+.fit-loader-emoji {
+    font-size: 1.4rem; display: inline-block;
+    animation: fitBounce 0.8s ease-in-out infinite alternate;
+}
+@keyframes fitBounce {
+    0% { transform: translateY(0) scale(1); opacity: 0.4; }
+    100% { transform: translateY(-8px) scale(1.15); opacity: 1; }
+}
+.fit-loader-text {
+    font-size: 0.78rem; color: var(--muted); font-weight: 500;
+    margin-left: 0.4rem;
+    animation: fitPulse 1.2s ease-in-out infinite;
+}
+@keyframes fitPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
 /* ── Page Transitions ───────────────────────────────────── */
 .section-enter {
   animation: pageIn 0.5s var(--ease) forwards;

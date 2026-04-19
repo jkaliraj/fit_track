@@ -370,8 +370,15 @@ async function logWorkout() {
   loadWorkouts();
 }
 
+const _loaderEmojis = ['🏃', '🏋️', '🚴', '🧘', '🏊'];
+function fitLoader() {
+    return `<div class="fit-loader">${_loaderEmojis.map((e, i) => `<span class="fit-loader-emoji" style="animation-delay:${i * 0.12}s">${e}</span>`).join('')}<span class="fit-loader-text">Loading...</span></div>`;
+}
+
 async function loadWorkouts() {
   if (!currentUser) return;
+  document.getElementById('todayWorkouts').innerHTML = fitLoader();
+  document.getElementById('workoutHistory').innerHTML = fitLoader();
   const today = new Date().toISOString().slice(0, 10);
   try {
     const [todayW, allW] = await Promise.all([
@@ -445,6 +452,7 @@ async function logMeal() {
 
 async function loadNutrition() {
   if (!currentUser) return;
+  document.getElementById('todayMeals').innerHTML = fitLoader();
   const today = new Date().toISOString().slice(0, 10);
   try {
     const meals = await api(
