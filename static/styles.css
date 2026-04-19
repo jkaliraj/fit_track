@@ -292,6 +292,9 @@ body {
   transform: scale(1.05);
 }
 
+.profile-menu-wrap {
+  position: relative;
+}
 .user-chip {
   display: flex;
   align-items: center;
@@ -303,7 +306,16 @@ body {
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
 }
+.user-chip:hover { background: var(--glass-hover); }
+.chevron-down {
+  font-size: 0.65rem;
+  opacity: 0.6;
+  transition: transform 0.2s var(--ease);
+}
+.profile-menu-wrap.open .chevron-down { transform: rotate(180deg); }
 .avatar-circle {
   width: 28px;
   height: 28px;
@@ -315,6 +327,59 @@ body {
   color: #fff;
   font-size: 0.7rem;
   font-weight: 700;
+}
+.avatar-circle.avatar-lg { width: 36px; height: 36px; font-size: 0.85rem; }
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  background: var(--surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 0.5rem;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+  z-index: 999;
+  animation: dropIn 0.2s var(--ease);
+}
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.dropdown-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+.dropdown-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.dropdown-divider {
+  height: 1px;
+  background: var(--glass-border);
+  margin: 0.3rem 0;
+}
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem 0.6rem;
+  border: none;
+  background: none;
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.dropdown-item:hover {
+  background: var(--glass-hover);
 }
 
 /* ── Buttons ────────────────────────────────────────────── */

@@ -37,10 +37,20 @@
         </nav>
         <div class="topbar-right">
             <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><span id="themeIcon">🌙</span></button>
-            <button class="icon-btn hidden" id="logoutBtn" onclick="logout()" title="Sign out">👋</button>
-            <div class="user-chip hidden" id="userBadge">
-                <span class="avatar-circle" id="navAvatar">?</span>
-                <span id="navUsername">—</span>
+            <div class="profile-menu-wrap hidden" id="userBadge">
+                <div class="user-chip" id="profileToggle">
+                    <span class="avatar-circle" id="navAvatar">?</span>
+                    <span id="navUsername">—</span>
+                    <span class="chevron-down">▾</span>
+                </div>
+                <div class="profile-dropdown hidden" id="profileDropdown">
+                    <div class="dropdown-user-info">
+                        <span class="avatar-circle avatar-lg" id="dropdownAvatar">?</span>
+                        <span class="dropdown-name" id="dropdownName">—</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" onclick="logout()">👋 Sign out</button>
+                </div>
             </div>
         </div>
     </header>

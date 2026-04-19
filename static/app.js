@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupNavClicks();
   setupTypeChips();
   setupChipPickers();
+  setupProfileMenu();
   applyTheme();
 });
 
@@ -89,6 +90,23 @@ function toggleTheme() {
   // Re-enable transitions after one paint frame
   requestAnimationFrame(() => {
     requestAnimationFrame(() => root.classList.remove("theme-switching"));
+  });
+}
+
+/* ── Profile Dropdown Menu ───────────────────────────────── */
+function setupProfileMenu() {
+  const toggle = document.getElementById("profileToggle");
+  const dropdown = document.getElementById("profileDropdown");
+  const wrap = document.getElementById("userBadge");
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = !dropdown.classList.contains("hidden");
+    dropdown.classList.toggle("hidden", open);
+    wrap.classList.toggle("open", !open);
+  });
+  document.addEventListener("click", () => {
+    dropdown.classList.add("hidden");
+    wrap.classList.remove("open");
   });
 }
 
@@ -187,12 +205,14 @@ function showLoggedIn() {
   document.getElementById("dashboardContent").classList.remove("hidden");
   document.getElementById("sectionDashboard").classList.remove("auth-page");
   document.getElementById("userBadge").classList.remove("hidden");
-  document.getElementById("logoutBtn").classList.remove("hidden");
   document.getElementById("desktopNav").classList.remove("hidden");
   document.getElementById("mobileNav").classList.remove("hidden");
-  document.getElementById("navAvatar").textContent =
-    (currentUser.display_name || "?")[0].toUpperCase();
+  const initial = (currentUser.display_name || "?")[0].toUpperCase();
+  document.getElementById("navAvatar").textContent = initial;
+  document.getElementById("dropdownAvatar").textContent = initial;
   document.getElementById("navUsername").textContent =
+    currentUser.display_name || currentUser.user_id;
+  document.getElementById("dropdownName").textContent =
     currentUser.display_name || currentUser.user_id;
   loadDashboard();
 }
@@ -204,7 +224,8 @@ function logout() {
   document.getElementById("dashboardContent").classList.add("hidden");
   document.getElementById("sectionDashboard").classList.add("auth-page");
   document.getElementById("userBadge").classList.add("hidden");
-  document.getElementById("logoutBtn").classList.add("hidden");
+  document.getElementById("profileDropdown").classList.add("hidden");
+  document.getElementById("userBadge").classList.remove("open");
   document.getElementById("desktopNav").classList.add("hidden");
   document.getElementById("mobileNav").classList.add("hidden");
   switchSection("dashboard");
